@@ -44,7 +44,7 @@ pipeline {
     post {
         always {
             dir('greencandle'){
-                sh "docker-compose -f docker-compose_jenkinks.yml -p $BUILD_ID down --rmi all"
+                sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID down --rmi all"
                 sh "docker network prune -f"
             }
         }
