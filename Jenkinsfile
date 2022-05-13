@@ -9,16 +9,11 @@ pipeline {
                 script {
                     sh "pwd; ls"
                     env.WORKSPACE = pwd()
-                    readFile "${env.WORKSPACE}/config.ini"
-                    configData = file.split("\n")
-                    configData.each {
-                        lineData = it.split("=")
-                        switch(lineData[0].toLowerCase().trim()){
-                            case "pair": pair = lineData[1].trim(); break;
-                            case "years": years = lineData[1].trim(); break;
-                            case "version": version = lineData[1].trim(); break;
-                        }
-                    }
+                    def props = read Properties  file:'config.ini'
+                    def pair= props['pair']
+                    def interval= props['interval']
+                    echo "Var1=${pair}"
+                    echo "Var2=${interval}"
                 }
             }
         }
