@@ -8,7 +8,8 @@ pipeline {
             steps {
                 script {
                     sh "pwd; ls"
-                    readFile "config.ini"
+                    env.WORKSPACE = pwd()
+                    readFile "${env.WORKSPACE}/config.ini"
                     configData = file.split("\n")
                     configData.each {
                         lineData = it.split("=")
