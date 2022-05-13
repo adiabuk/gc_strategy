@@ -7,6 +7,7 @@ pipeline {
         stage("get config"){
             steps {
                 script {
+                    sh "pwd; ls"
                     readFile "config.ini"
                     configData = file.split("\n")
                     configData.each {
