@@ -2,6 +2,9 @@
 pipeline {
 
     agent any
+    environment {
+        image_id = "${env.BUILD_ID}"
+    }
 
     stages {
         stage("get config"){
