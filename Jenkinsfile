@@ -33,7 +33,7 @@ pipeline {
            steps {
                dir('greencandle') {
                    sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
-                   sh "docker exec unit-runner-$BUILD_ID /docker-entrypoint.sh backend_test -i $interval -d . -p $pair -s
+                   sh "docker exec unit-runner-$BUILD_ID /docker-entrypoint.sh backend_test -i $interval -d . -p $pair -s"
                }
            }
         }
