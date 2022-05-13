@@ -3,23 +3,23 @@ pipeline {
 
     agent any
 
-
-    environment {
-        script {
-            readFile "<your config file>"
-            configData = file.split("\n")
-            configData.each {
-                lineData = it.split("=")
-                switch(lineData[0].toLowerCase().trim()){
-                    case "pair": pair = lineData[1].trim(); break;
-                    case "years": years = lineData[1].trim(); break;
-                    case "version": version = lineData[1].trim(); break;
+    stages {
+        stage("get config"){
+            steps {
+                script {
+                    readFile "config.ini"
+                    configData = file.split("\n")
+                    configData.each {
+                        lineData = it.split("=")
+                        switch(lineData[0].toLowerCase().trim()){
+                            case "pair": pair = lineData[1].trim(); break;
+                            case "years": years = lineData[1].trim(); break;
+                            case "version": version = lineData[1].trim(); break;
+                        }
+                    }
                 }
             }
         }
-    }
-
-    stages {
         stage("Clone repo"){
             steps {
                 sh 'git clone https://github.com/adiabuk/greencandle.git -b $version'
