@@ -16,6 +16,7 @@ pipeline {
                     env.pair= props['pair']
                     env.interval= props['interval']
                     env.name = props['name']
+                    env.year = props['year']
                     echo "Var1=${pair}"
                     echo "Var2=${interval}"
                 }
