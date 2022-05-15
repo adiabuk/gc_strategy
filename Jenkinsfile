@@ -32,12 +32,12 @@ pipeline {
         }
         stage("Run tests"){
            steps {
-               sh "env"
-               sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
-               sh "docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini"
-               sh "docker exec unit-runner-$BUILD_ID bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'"
-               sh "sleep 60"
                dir('greencandle') {
+                   sh "env"
+                   sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
+                   sh "docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini"
+                   sh "docker exec unit-runner-$BUILD_ID bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'"
+                   sh "sleep 60"
                    script {
                        def arr = env.intervals.split(",")
                        for (interval in arr) {
