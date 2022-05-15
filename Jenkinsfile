@@ -1,6 +1,5 @@
 
 pipeline {
-
     agent any
     environment {
         image_id = "${env.BUILD_ID}"
@@ -36,21 +35,19 @@ pipeline {
                dir('greencandle') {
                    script {
                        def arr = env.intervals.split(",")
-                       for (i in arr) {
-                           println "now got ${i}"
+                       for (interval in arr) {
+                           println "Running interval ${interval}"
+                           sh "env"
+                           sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
+                           sh "docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini"
+                           sh "docker exec unit-runner-$BUILD_ID bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'"
+                           sh "sleep 60"
+                           sh "docker exec unit-runner-$BUILD_ID bash -c 'backend_test -i $interval -d /data/altcoin_historical/${year}/year -p $pair -s 2>&1 | tee /data/output/${name}/${pair}-${interval}-${year}.log'"
+                           sh "docker exec unit-runner-$BUILD_ID bash -c 'report ${interval} /data/output/${name}/${pair}-${interval}-${year}.xlsx'"
+                           sh "docker exec unit-runner-$BUILD_ID bash -c 'create_graph -p ${pair} -i ${interval} -o /data/output/${name}'"
+                           sh "docker exec unit-runner-$BUILD_ID bash -c 'cp /etc/greencandle.ini /data/output/${name}/greencandle.ini.${pair}-${interval}'"
                        }
                    }
-
-                   sh "sleep 1000"
-                   sh "env"
-                   sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
-                   sh "docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini"
-                   sh "docker exec unit-runner-$BUILD_ID bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'"
-                   sh "sleep 60"
-                   sh "docker exec unit-runner-$BUILD_ID bash -c 'backend_test -i $interval -d /data/altcoin_historical/${year}/year -p $pair -s 2>&1 | tee /data/output/${name}/${pair}-${interval}-${year}.log'"
-                   sh "docker exec unit-runner-$BUILD_ID bash -c 'report ${interval} /data/output/${name}/${pair}-${interval}-${year}.xlsx'"
-                   sh "docker exec unit-runner-$BUILD_ID bash -c 'create_graph -p ${pair} -i ${interval} -o /data/output/${name}'"
-
                }
            }
         }
