@@ -41,7 +41,7 @@ pipeline {
                    sh "sleep 60"
                    sh "docker exec unit-runner-$BUILD_ID bash -c 'backend_test -i $interval -d /data/altcoin_historical/${year}/year -p $pair -s 2>&1 | tee /data/output/${name}/${pair}.log'"
                    sh "docker exec unit-runner-$BUILD_ID bash -c 'report ${interval} /data/output/${name}/${pair}-${interval}-${year}.xlsx'"
-                   sh "docker exec unit-runner-$BUILD_ID bash -c 'create_graph -p ${pair} -i ${interval} -o /data/output/${n
+                   sh "docker exec unit-runner-$BUILD_ID bash -c 'create_graph -p ${pair} -i ${interval} -o /data/output/${name}'"
 
                }
            }
