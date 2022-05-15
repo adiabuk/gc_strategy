@@ -36,7 +36,7 @@ pipeline {
                dir('greencandle') {
                    sh "env"
                    sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
-                   sh "docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle"
+                   sh "docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini"
                    sh "docker exec unit-runner-$BUILD_ID bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'"
                    sh "sleep 60"
                    sh "docker exec unit-runner-$BUILD_ID bash -c 'backend_test -i $interval -d /data/altcoin_historical/${year}/year -p $pair -s 2>&1 | tee /data/output/${name}/${pair}.log'"
