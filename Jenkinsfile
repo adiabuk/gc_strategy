@@ -14,7 +14,7 @@ pipeline {
                     env.WORKSPACE = pwd()
                     def props = readProperties file:'config.ini'
                     env.pair= props['pair']
-                    env.intervals= props['intervals'].split(',')
+                    env.intervals= props['intervals']
                     env.name = props['name']
                     env.year = props['year']
                     echo "Var1=${pair}"
@@ -35,9 +35,9 @@ pipeline {
            steps {
                dir('greencandle') {
                    script {
-
-                       for(String interval: env.intervals) {
-                           echo interval
+                       def arr = env.intervals.split(",")
+                       for (i in arr) {
+                           println "now got ${i}"
                        }
                    }
 
