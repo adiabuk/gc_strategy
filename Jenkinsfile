@@ -14,11 +14,11 @@ pipeline {
                     env.WORKSPACE = pwd()
                     def props = readProperties file:'config.ini'
                     env.pair= props['pair']
-                    env.interval= props['interval']
+                    env.intervals= props['intervals'].split(',')
                     env.name = props['name']
                     env.year = props['year']
                     echo "Var1=${pair}"
-                    echo "Var2=${interval}"
+                    echo "Var2=${intervals}"
                 }
             }
         }
@@ -34,6 +34,10 @@ pipeline {
         stage("Run tests"){
            steps {
                dir('greencandle') {
+                   env.intervals.each() {
+                       echo it
+                   }
+                   sh "sleep 1000"
                    sh "env"
                    sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
                    sh "docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini"
