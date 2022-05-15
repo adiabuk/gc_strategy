@@ -34,9 +34,13 @@ pipeline {
         stage("Run tests"){
            steps {
                dir('greencandle') {
-                   env.intervals.each() {
-                       echo it
+                   script {
+
+                       for(String interval: env.intervals) {
+                           echo interval
+                       }
                    }
+
                    sh "sleep 1000"
                    sh "env"
                    sh "docker-compose -f docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit"
