@@ -37,7 +37,7 @@ pipeline {
                    export id=${BUILD_ID}
                    export test=strat-${BUILD_ID}
                    docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit
-                   docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini
+                   docker cp greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini
                    docker exec unit-runner-$BUILD_ID bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'
                    sleep 60
                    """
