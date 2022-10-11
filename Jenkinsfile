@@ -12,11 +12,11 @@ pipeline {
                     sh "pwd; ls"
                     env.WORKSPACE = pwd()
                     def props = readProperties file:'config.ini'
-                    env.pairs= props['pair']
+                    env.pairs= props['pairs']
                     env.intervals= props['intervals']
                     env.name = props['name']
                     env.year = props['year']
-                    echo "Var1=${pair}"
+                    echo "Var1=${pairs}"
                     echo "Var2=${intervals}"
                 }
             }
