@@ -12,7 +12,7 @@ pipeline {
                     sh "pwd; ls"
                     env.WORKSPACE = pwd()
                     def props = readProperties file:'config.ini'
-                    env.pair= props['pair']
+                    env.pairs= props['pair']
                     env.intervals= props['intervals']
                     env.name = props['name']
                     env.year = props['year']
@@ -43,16 +43,20 @@ pipeline {
                    """
                    script {
                        def arr = env.intervals.split(",")
+                       def arr2 = env.pairs.split(",")
                        for (interval in arr) {
-                           println "Running interval ${interval}"
-                           sh """
-                           export id=${BUILD_ID}
-                           export test=strat-${BUILD_ID}
-                           docker exec unit-runner-$BUILD_ID bash -c 'backend_test -i $interval -d /data/altcoin_historical/${year} -a 2>&1 | tee /data/output/${name}/all-${interval}-${year}.log'
-                           docker exec unit-runner-$BUILD_ID bash -c 'report ${interval} /data/output/${name}/${pair}-${interval}-${year}.xlsx'
-                           docker exec unit-runner-$BUILD_ID bash -c 'create_graph -a -i ${interval} -o /data/output/${name}'
-                           docker exec unit-runner-$BUILD_ID bash -c 'cp /etc/greencandle.ini /data/output/${name}/greencandle.ini.all-${interval}'
-                           """
+                          for (pair in arr2) {
+                             println "Running interval ${interval}"
+                             sh """
+                             export id=${BUILD_ID}
+                             export test=strat-${BUILD_ID}
+                             docker exec unit-runner-$BUILD_ID bash -c 'backend_test -i $interval -d
+                             /data/altcoin_historical/${year} -p ${pair} -s 2>&1 | tee /data/output/${name}/${pair}-${interval}-${year}.log'
+                             docker exec unit-runner-$BUILD_ID bash -c 'report ${interval} /data/output/${name}/${pair}-${interval}-${year}.xlsx'
+                             docker exec unit-runner-$BUILD_ID bash -c 'create_graph -p {pair} -i ${interval} -o /data/output/${name}'
+                             docker exec unit-runner-$BUILD_ID bash -c 'cp /etc/greencandle.ini /data/output/${name}/greencandle.ini.${pair}-${interval}'
+                             """
+                           }
                        }
                    }
                }
