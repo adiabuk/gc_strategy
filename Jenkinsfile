@@ -35,11 +35,11 @@ pipeline {
                dir('greencandle') {
                    sh """
                    env
-                   export id=${BUILD_ID}
-                   export test=strat-${BUILD_ID}
-                   docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit
-                   docker cp ../greencandle.ini unit-runner-${BUILD_ID}:/etc/greencandle.ini
-                   docker exec unit-runner-$BUILD_ID bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'
+                   export id=${BUILD_ID}-${JOB_BASE_NAME}
+                   export test=strat-${BUILD_ID}-${JOB_BASE_NAME}
+                   docker-compose -f install/docker-compose_jenkins.yml -p ${BUILD_ID}-${JOB_BASE_NAME} up -d unit-runner redis-unit mysql-unit
+                   docker cp ../greencandle.ini unit-runner-${BUILD_ID}-${JOB_BASE_NAME}:/etc/greencandle.ini
+                   docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'
                    sleep 60
                    """
                    script {
