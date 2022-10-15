@@ -34,6 +34,7 @@ pipeline {
            steps {
                dir('greencandle') {
                    sh """
+                   env
                    export id=${BUILD_ID}
                    export test=strat-${BUILD_ID}
                    docker-compose -f install/docker-compose_jenkins.yml -p $BUILD_ID up -d unit-runner redis-unit mysql-unit
