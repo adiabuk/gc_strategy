@@ -40,7 +40,7 @@ pipeline {
                    docker-compose -f install/docker-compose_jenkins.yml -p ${BUILD_ID}-${JOB_BASE_NAME} up -d unit-runner redis-unit mysql-unit
                    docker cp ../greencandle.ini unit-runner-${BUILD_ID}-${JOB_BASE_NAME}:/etc/greencandle.ini
                    docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'
-                   sleep 60
+                   sleep 120
                    """
                    script {
                        def arr = env.intervals.split(",")
