@@ -27,7 +27,7 @@ pipeline {
                 sh 'git clone https://github.com/adiabuk/greencandle.git -b master'
                 dir('greencandle') {
                     sh 'git checkout -f $commit'
-                    sh 'sudo ln -s `pwd` /srv/greencandle'
+                    //sh 'sudo ln -s `pwd` /srv/greencandle'
                 }
             }
         }
