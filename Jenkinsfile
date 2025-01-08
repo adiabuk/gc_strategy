@@ -40,8 +40,6 @@ pipeline {
                    export test=strat-${BUILD_ID}-${JOB_BASE_NAME}
                    docker-compose -f install/docker-compose_jenkins.yml -p ${BUILD_ID}-${JOB_BASE_NAME} up -d unit-runner redis-unit mysql-unit
                    docker cp ../greencandle.ini unit-runner-${BUILD_ID}-${JOB_BASE_NAME}:/etc/greencandle.ini
-                   docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'mkdir -p /data/output/${name} ; chmod 777 /data/output/${name}'
-                   sleep 120
                    """
                    script {
                        def arr = env.intervals.split(",")
@@ -53,10 +51,10 @@ pipeline {
                              export id=${BUILD_ID}-${JOB_BASE_NAME}
                              export test=strat-${BUILD_ID}-${JOB_BASE_NAME}
                              docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c
-                             'backend_test -i $interval -d /data/backtest -p ${pair} -s 2>&1 | tee /data/output/${name}/${pair}-${interval}-${year}.log'
+                             'backend_test -i $interval -d /data/backtest -p ${pair} -s 2>&1 | tee /data/output/${pair}-${interval}-${year}.log'
                              docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'report ${interval} /data/output/${pair}-${interval}-${year}.xlsx'
                              docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'create_graph -p ${pair} -i ${interval} -o /data/output/${name}'
-                             docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'cp /etc/greencandle.ini /data/output/${name}/greencandle.ini.${pair}-${interval}'
+                             docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'cp /etc/greencandle.ini /data/output/greencandle.ini.${pair}-${interval}'
                              """
                            }
                        }
