@@ -50,8 +50,7 @@ pipeline {
                              sh """
                              export id=${BUILD_ID}-${JOB_BASE_NAME}
                              export test=strat-${BUILD_ID}-${JOB_BASE_NAME}
-                             docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c
-                             'backend_test -i $interval -d /data/backtest -p ${pair} -s 2>&1 | tee /data/output/${pair}-${interval}-${year}.log'
+                             docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'backend_test -i $interval -d /data/backtest -p ${pair} -s 2>&1 | tee /data/output/${pair}-${interval}-${year}.log'
                              docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'report ${interval} /data/output/${pair}-${interval}-${year}.xlsx'
                              docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'create_graph -p ${pair} -i ${interval} -o /data/output/${name}'
                              docker exec unit-runner-${BUILD_ID}-${JOB_BASE_NAME} bash -c 'cp /etc/greencandle.ini /data/output/greencandle.ini.${pair}-${interval}'
